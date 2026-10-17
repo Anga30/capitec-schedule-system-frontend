@@ -1,0 +1,130 @@
+.appointment-calendar {
+  border: 0;
+  margin: 0 0 20px;
+  padding: 0;
+}
+
+.appointment-calendar legend {
+  margin-bottom: 12px;
+  color: #34443d;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.calendar-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #263a31;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.calendar-nav {
+  width: 34px;
+  height: 34px;
+  border: 1px solid #dce4de;
+  border-radius: 8px;
+  background: #fff;
+  color: #087b53;
+  font-size: 23px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.calendar-nav:disabled {
+  color: #a8b2ac;
+  cursor: not-allowed;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+}
+
+.calendar-grid > span {
+  display: grid;
+  min-width: 0;
+  place-items: center;
+}
+
+.calendar-weekday {
+  height: 30px;
+  color: #78857e;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.calendar-day {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1;
+  max-width: 42px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+  color: #9aa59e;
+  font-size: 13px;
+}
+
+.calendar-day:disabled {
+  cursor: not-allowed;
+}
+
+.calendar-day.is-available {
+  border-color: #cde5d8;
+  background: #eff8f3;
+  color: #087b53;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.calendar-day.is-available:hover,
+.calendar-day.is-selected {
+  border-color: #087b53;
+  background: #087b53;
+  color: #fff;
+}
+
+.calendar-day i,
+.calendar-legend i {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #087b53;
+}
+
+.calendar-day i {
+  position: absolute;
+  bottom: 4px;
+}
+
+.calendar-day.is-selected i {
+  background: #d4e94a;
+}
+
+.calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 10px 0 0;
+  color: #78857e;
+  font-size: 11px;
+}
+
+.calendar-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calendar-legend .is-unavailable {
+  background: #cbd3ce;
+}
+
+.calendar-loading {
+  color: #78857e;
+  font-size: 13px;
+}
