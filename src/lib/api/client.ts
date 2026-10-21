@@ -3,23 +3,31 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 export type ApiFailureKind = 'offline' | 'server';
 
 export class ApiRequestError extends Error {
-  constructor(message: string, public readonly ticketId: string, public readonly kind: ApiFailureKind) {
+  constructor(
+    message: string,
+    public readonly ticketId: string,
+    public readonly kind: ApiFailureKind,
+  ) {
     super(message);
     this.name = 'ApiRequestError';
   }
 }
 
 export class ApiHttpError extends Error {
-  constructor(message: string, public readonly status: number) {
+  constructor(
+    message: string,
+    public readonly status: number,
+  ) {
     super(message);
     this.name = 'ApiHttpError';
   }
 }
 
 function createTicketId(): string {
-  const uuid = typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
-    ? crypto.randomUUID()
-    : `${Date.now().toString(16)}-${Math.random().toString(16).slice(2)}`;
+  const uuid =
+    typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function'
+      ? crypto.randomUUID()
+      : `${Date.now().toString(16)}-${Math.random().toString(16).slice(2)}`;
   return `TKT-${uuid.toUpperCase()}`;
 }
 
@@ -31,7 +39,7 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     const response = await fetch(`${API_URL}${path}`, { ...init, headers });
     let result: { error?: string; ticketId?: string };
     try {
-      result = await response.json() as { error?: string; ticketId?: string };
+      result = (await response.json()) as { error?: string; ticketId?: string };
     } catch {
       result = {};
     }
@@ -43,7 +51,10 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
           'server',
         );
       }
-      throw new ApiHttpError(result.error || 'The request could not be completed.', response.status);
+      throw new ApiHttpError(
+        result.error || 'The request could not be completed.',
+        response.status,
+      );
     }
     return result as T;
   } catch (cause) {
@@ -59,7 +70,13 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
   }
 }
 
-export function apiGet<T>(path: string) { return request<T>(path); }
+export function apiGet<T>(path: string) {
+  return request<T>(path);
+}
 export function apiPost<T>(path: string, body: unknown) {
-  return request<T>(path, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  return request<T>(path, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
 }

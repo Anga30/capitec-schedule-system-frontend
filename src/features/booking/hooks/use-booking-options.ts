@@ -37,30 +37,47 @@ export function useBookingOptions() {
       } catch (cause: unknown) {
         if (!active) return;
         if (!healthUnavailable) {
-          setError(cause instanceof Error ? cause.message : 'Our service is temporarily unavailable. Please try again shortly.');
+          setError(
+            cause instanceof Error
+              ? cause.message
+              : 'Our service is temporarily unavailable. Please try again shortly.',
+          );
           setTicketId(cause instanceof ApiRequestError ? cause.ticketId : '');
         }
         healthUnavailable = true;
       }
     };
     void checkHealth();
-    const healthTimer = window.setInterval(() => { void checkHealth(); }, 10000);
-    getDepartments().then((items) => { if (active) setDepartments(items); }).catch((cause: unknown) => {
-      if (active) reportError(cause, 'Departments are temporarily unavailable.');
-    });
-    return () => { active = false; window.clearInterval(healthTimer); };
+    const healthTimer = window.setInterval(() => {
+      void checkHealth();
+    }, 10000);
+    getDepartments()
+      .then((items) => {
+        if (active) setDepartments(items);
+      })
+      .catch((cause: unknown) => {
+        if (active) reportError(cause, 'Departments are temporarily unavailable.');
+      });
+    return () => {
+      active = false;
+      window.clearInterval(healthTimer);
+    };
   }, []);
 
   useEffect(() => {
     let active = true;
-    getBranches().then((items) => {
-      if (!active) return;
-      setBranches(items);
-      if (items[0]) setBranchId(items[0].id);
-    }).catch((cause: unknown) => {
-      if (active) reportError(cause, 'Branches are temporarily unavailable.');
-    });
-    return () => { active = false; };
+    getBranches()
+      .then((items) => {
+        if (!active) return;
+        setBranches(items);
+        if (items[0]) setBranchId(items[0].id);
+      })
+      .catch((cause: unknown) => {
+        if (active) reportError(cause, 'Branches are temporarily unavailable.');
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -68,33 +85,65 @@ export function useBookingOptions() {
     setAvailableDates([]);
     setDate('');
     setAvailabilityLoading(Boolean(branchId));
-    if (!branchId) return () => { active = false; };
-    getAvailableDates(branchId).then((items) => {
-      if (!active) return;
-      setAvailableDates(items);
-      setDate((selectedDate) => items.includes(selectedDate) ? selectedDate : '');
-    }).catch((cause: unknown) => {
-      if (active) reportError(cause, 'Could not load available dates.');
-    }).finally(() => {
-      if (active) setAvailabilityLoading(false);
-    });
-    return () => { active = false; };
+    if (!branchId)
+      return () => {
+        active = false;
+      };
+    getAvailableDates(branchId)
+      .then((items) => {
+        if (!active) return;
+        setAvailableDates(items);
+        setDate((selectedDate) => (items.includes(selectedDate) ? selectedDate : ''));
+      })
+      .catch((cause: unknown) => {
+        if (active) reportError(cause, 'Could not load available dates.');
+      })
+      .finally(() => {
+        if (active) setAvailabilityLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, [branchId]);
 
   useEffect(() => {
     let active = true;
     setSlots([]);
     setSlotsLoading(Boolean(branchId && date));
-    if (!branchId || !date) return () => { active = false; };
-    getAvailableSlots(branchId, date).then((items) => {
-      if (active) setSlots(items);
-    }).catch((cause: unknown) => {
-      if (active) reportError(cause, 'Could not load available times.');
-    }).finally(() => {
-      if (active) setSlotsLoading(false);
-    });
-    return () => { active = false; };
+    if (!branchId || !date)
+      return () => {
+        active = false;
+      };
+    getAvailableSlots(branchId, date)
+      .then((items) => {
+        if (active) setSlots(items);
+      })
+      .catch((cause: unknown) => {
+        if (active) reportError(cause, 'Could not load available times.');
+      })
+      .finally(() => {
+        if (active) setSlotsLoading(false);
+      });
+    return () => {
+      active = false;
+    };
   }, [branchId, date]);
 
-  return { branches, departments, slots, setSlots, slotsLoading, branchId, setBranchId, date, setDate, availableDates, availabilityLoading, error, setError, ticketId, setTicketId };
+  return {
+    branches,
+    departments,
+    slots,
+    setSlots,
+    slotsLoading,
+    branchId,
+    setBranchId,
+    date,
+    setDate,
+    availableDates,
+    availabilityLoading,
+    error,
+    setError,
+    ticketId,
+    setTicketId,
+  };
 }

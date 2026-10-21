@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint .",
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css}\" next.config.ts next-env.d.ts eslint.config.mjs jest.config.mjs jest.setup.ts package.json tsconfig.json"
   },
   "dependencies": {
     "next": "^15.1.4",
@@ -28,6 +29,7 @@
     "eslint-config-next": "^15.5.27",
     "jest": "^30.5.2",
     "jest-environment-jsdom": "^30.5.2",
+    "prettier": "^3.9.10",
     "typescript": "^5.7.2"
   },
   "optionalDependencies": {

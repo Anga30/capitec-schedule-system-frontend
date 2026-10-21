@@ -14,7 +14,8 @@ export function ErrorModal({ message, ticketId, onClose }: Props) {
 
   useEffect(() => {
     if (!message) return undefined;
-    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousFocus =
+      document.activeElement instanceof HTMLElement ? document.activeElement : null;
     closeButtonRef.current?.focus();
 
     function handleKeyDown(event: KeyboardEvent) {
@@ -48,21 +49,31 @@ export function ErrorModal({ message, ticketId, onClose }: Props) {
 
   if (!message) return null;
 
-  return <div className="error-modal-backdrop">
-    <section
-      ref={dialogRef}
-      className="error-modal"
-      role="alertdialog"
-      aria-modal="true"
-      aria-labelledby="error-modal-title"
-      aria-describedby="error-modal-message"
-      tabIndex={-1}
-    >
-      <span className="error-modal-icon" aria-hidden="true">!</span>
-      <h2 id="error-modal-title">We couldn’t complete that</h2>
-      <p id="error-modal-message">{message}</p>
-      {ticketId && <p className="error-modal-ticket">Ticket ID: <code>{ticketId}</code></p>}
-      <button ref={closeButtonRef} className="primary" type="button" onClick={onClose}>Close</button>
-    </section>
-  </div>;
+  return (
+    <div className="error-modal-backdrop">
+      <section
+        ref={dialogRef}
+        className="error-modal"
+        role="alertdialog"
+        aria-modal="true"
+        aria-labelledby="error-modal-title"
+        aria-describedby="error-modal-message"
+        tabIndex={-1}
+      >
+        <span className="error-modal-icon" aria-hidden="true">
+          !
+        </span>
+        <h2 id="error-modal-title">We couldn’t complete that</h2>
+        <p id="error-modal-message">{message}</p>
+        {ticketId && (
+          <p className="error-modal-ticket">
+            Ticket ID: <code>{ticketId}</code>
+          </p>
+        )}
+        <button ref={closeButtonRef} className="primary" type="button" onClick={onClose}>
+          Close
+        </button>
+      </section>
+    </div>
+  );
 }
